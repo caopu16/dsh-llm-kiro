@@ -75,11 +75,13 @@ Kiro 按请求出口授权 Claude 模型,而获授权的出口因部署而异,�
 provider 选 `kiro`,模型 id 用它提供的任意一个:
 
 ```
-claude-opus-5  claude-sonnet-4.5  claude-sonnet-4.6  claude-opus-4.5  claude-haiku-4.5
-deepseek-3.2   glm-5              minimax-m2.5       qwen3-coder-next  auto
+claude-opus-5     claude-opus-4.8    claude-opus-4.7   claude-opus-4.6  claude-opus-4.6-1m
+claude-opus-4.5   claude-sonnet-5    claude-sonnet-4.6 claude-sonnet-4.6-1m
+claude-sonnet-4.5 claude-sonnet-4    claude-haiku-4.5  auto
+deepseek-3.2      glm-5              minimax-m2.5      qwen3-coder-next
 ```
 
-模型 id 直接作为 `modelId` 透传,所以 Kiro 日后新增的模型无需升级本包即可使用。内置目录仅为建议。
+模型 id 直接作为 `modelId` 透传,所以 Kiro 日后新增的模型无需升级本包即可使用。内置目录仅为建议:未列出的 id 同样能发往服务端,上面这些是在一个账号档位上实测被接受的。`minimax-m2.1` 未列入是因为服务端报其暂时不可用,Sonnet 4.5、Sonnet 5、Opus 4.8 的 `-1m` 变体未列入是因为服务端拒其为未知 id——其他档位可能不同。
 
 ## 为什么 Claude 需要代理
 

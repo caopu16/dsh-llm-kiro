@@ -55,15 +55,25 @@ const DEFAULT_TOKEN_EXPIRY_BUFFER_MS = 300_000
 const CONTEXT_1M = 1_000_000
 
 /**
- * Models this account tier reaches, verified against the live service. Claude
- * entries need authorized egress; the open-weight entries answer from any.
+ * Models this account tier reaches, each verified against the live service.
+ * Claude entries need authorized egress; the open-weight entries answer from
+ * any. `minimax-m2.1` is absent because the service reports it temporarily
+ * unavailable, and the `-1m` variants of Sonnet 4.5, Sonnet 5, and Opus 4.8
+ * are absent because it refuses them as unknown ids — an unlisted id still
+ * passes through, so a tier that serves them needs no code change.
  */
 const DEFAULT_MODELS: KiroCatalogModel[] = [
   { id: 'auto', name: 'Auto', thinking: false },
+  { id: 'claude-sonnet-4', name: 'Claude Sonnet 4', thinking: false },
   { id: 'claude-sonnet-4.5', name: 'Claude Sonnet 4.5', thinking: true },
   { id: 'claude-sonnet-4.6', name: 'Claude Sonnet 4.6', contextWindow: CONTEXT_1M, thinking: true },
+  { id: 'claude-sonnet-4.6-1m', name: 'Claude Sonnet 4.6 (1M)', contextWindow: CONTEXT_1M, thinking: true },
   { id: 'claude-sonnet-5', name: 'Claude Sonnet 5', contextWindow: CONTEXT_1M, thinking: true },
   { id: 'claude-opus-4.5', name: 'Claude Opus 4.5', thinking: true },
+  { id: 'claude-opus-4.6', name: 'Claude Opus 4.6', contextWindow: CONTEXT_1M, thinking: true },
+  { id: 'claude-opus-4.6-1m', name: 'Claude Opus 4.6 (1M)', contextWindow: CONTEXT_1M, thinking: true },
+  { id: 'claude-opus-4.7', name: 'Claude Opus 4.7', contextWindow: CONTEXT_1M, thinking: true },
+  { id: 'claude-opus-4.8', name: 'Claude Opus 4.8', contextWindow: CONTEXT_1M, thinking: true },
   { id: 'claude-opus-5', name: 'Claude Opus 5', contextWindow: CONTEXT_1M, thinking: true },
   { id: 'claude-haiku-4.5', name: 'Claude Haiku 4.5', thinking: false },
   { id: 'deepseek-3.2', name: 'DeepSeek 3.2', thinking: true },

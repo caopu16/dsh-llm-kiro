@@ -75,11 +75,13 @@ The plugin also registers the `llm-kiro` settings namespace, so a `llm-kiro:` se
 Select provider `kiro` and any model id it serves:
 
 ```
-claude-opus-5  claude-sonnet-4.5  claude-sonnet-4.6  claude-opus-4.5  claude-haiku-4.5
-deepseek-3.2   glm-5              minimax-m2.5       qwen3-coder-next  auto
+claude-opus-5     claude-opus-4.8    claude-opus-4.7   claude-opus-4.6  claude-opus-4.6-1m
+claude-opus-4.5   claude-sonnet-5    claude-sonnet-4.6 claude-sonnet-4.6-1m
+claude-sonnet-4.5 claude-sonnet-4    claude-haiku-4.5  auto
+deepseek-3.2      glm-5              minimax-m2.5      qwen3-coder-next
 ```
 
-Model ids are passed through as the wire `modelId`, so a model Kiro adds later works without upgrading this package. The shipped catalog is advisory only.
+Model ids are passed through as the wire `modelId`, so a model Kiro adds later works without upgrading this package. The shipped catalog is advisory only: an unlisted id still reaches the service, and the ids above are the ones one account tier was observed to accept. `minimax-m2.1` is omitted because the service reports it temporarily unavailable, and the `-1m` variants of Sonnet 4.5, Sonnet 5, and Opus 4.8 because it rejects them as unknown — another tier may differ.
 
 ## Why Claude needs a proxy
 
