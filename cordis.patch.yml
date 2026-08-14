@@ -1,0 +1,16 @@
+# The dsh-llm-kiro bundle patch: mounts the Kiro adapter into any profile that
+# installs this package. Applied after the profile's other bundle layers, so
+# the user's own `cordis.patch.yml` still outranks this row by id.
+#
+# No proxy, region, or profile ARN is inlined. Kiro authorizes Claude models by
+# request egress, and the permitted egress differs per deployment, so it is a
+# user fact rather than a package default: supply it in the profile patch layer
+# or the `llm-kiro:` settings section, which is hot-reloaded.
+#
+# Credentials are deliberately absent too. Kiro's own IDE or CLI sign-in owns
+# the token files under `~/.aws/sso/cache`; this adapter reads and refreshes
+# them rather than introducing a second place to store the same secret.
+
+- insert:
+    - id: llm-kiro
+      name: '@deepseek-ai/dsh-llm-kiro'
