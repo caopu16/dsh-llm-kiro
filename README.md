@@ -1,5 +1,7 @@
 # dsh-llm-kiro
 
+English | [中文](README.zh.md)
+
 An [AWS Kiro](https://kiro.dev) (CodeWhisperer) adapter for the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) LLM seam. It registers the `kiro` provider route, so a signed-in Kiro account serves Claude and open-weight models to the harness without a separate API key.
 
 ## Requirements
