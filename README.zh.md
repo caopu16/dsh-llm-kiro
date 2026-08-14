@@ -44,16 +44,17 @@ npm test
 
 ## 配置
 
-Kiro 按请求出口授权 Claude 模型,而获授权的出口因部署而异,所以本包不预置任何代理。请在 profile 的 patch 层(`~/.dsh/profiles/<名称>/cordis.patch.yml`)提供你自己的:
+Kiro 按请求出口授权 Claude 模型,而获授权的出口因部署而异,所以本包不预置任何代理。请把你自己的写进 `$DSH_HOME/settings.yaml`(即 `~/.dsh/settings.yaml`)的 `llm-kiro:` 段:
 
 ```yaml
-- id: llm-kiro
-  config:
-    proxyUrl: http://proxy.example:1082
-    reasoningEffort: medium
+llm-kiro:
+  proxyUrl: http://proxy.example:1082
+  reasoningEffort: medium
 ```
 
-这条配置是按 id 命中已存在的行。**不要**把它包在 `insert:` 列表里——本包自带的 patch 层已经 insert 了 `llm-kiro`,同一个 id 再 insert 一次会让整个 profile 启动失败,报 `duplicate loader entry id: llm-kiro`。
+下面所有字段都推荐配在这里。插件把 `llm-kiro` 注册为设置命名空间,所以这一段改动无需重启即生效,它的优先级高于 composition 配置,web 端 Models 页面写入的也是这里。
+
+注意 `--dump-config` 只打印 composition 树,配在这里的字段不会出现在其输出中。想确认代理确实生效,直接向某个 `claude-*` 模型提问:没有获授权的出口时它会以 `INVALID_MODEL` 失败。
 
 每个字段都是可选的:
 
@@ -70,7 +71,19 @@ Kiro 按请求出口授权 Claude 模型,而获授权的出口因部署而异,�
 | `tokenExpiryBufferMs` | `300000` | 在过期前多久刷新 access token。 |
 | `retryPolicy` | 有界的常规策略 | provider 自有的重试策略,由 `dsh-llm-retry` 执行。 |
 
-插件还注册了 `llm-kiro` 设置命名空间,因此 `$DSH_HOME/settings.yaml` 里的 `llm-kiro:` 段可以覆盖上述任意字段而无需重启——web 端的 Models 页面写的就是这里。
+### 改为配在 profile 里
+
+如果某个部署希望代理绑定到单个 profile 而不是整台机器,也可以改为在 `~/.dsh/profiles/<名称>/cordis.patch.yml` 里给这一行打补丁:
+
+```yaml
+- id: llm-kiro
+  config:
+    proxyUrl: http://proxy.example:1082
+```
+
+两点注意。这条配置是**按 id** 命中已存在的行——不要把它包在 `insert:` 列表里,因为本包自带的 patch 层已经 insert 了 `llm-kiro`,同一个 id 再 insert 一次会让整个 profile 启动失败,报 `duplicate loader entry id: llm-kiro`。另外 patch 层只在重启后生效,而设置段是实时重载的。
+
+同一个字段只配在一处。两处都配不算错误——设置段会胜出——但那会让你改 patch 层时看起来毫无反应。
 
 ## 使用
 

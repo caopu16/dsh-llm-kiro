@@ -44,16 +44,17 @@ npm test
 
 ## Configure
 
-Kiro authorizes Claude models by request egress, and the permitted egress differs per deployment, so no proxy is shipped as a default. Supply yours in the profile patch layer (`~/.dsh/profiles/<name>/cordis.patch.yml`):
+Kiro authorizes Claude models by request egress, and the permitted egress differs per deployment, so no proxy is shipped as a default. Put yours in the `llm-kiro:` section of `$DSH_HOME/settings.yaml` (`~/.dsh/settings.yaml`):
 
 ```yaml
-- id: llm-kiro
-  config:
-    proxyUrl: http://proxy.example:1082
-    reasoningEffort: medium
+llm-kiro:
+  proxyUrl: http://proxy.example:1082
+  reasoningEffort: medium
 ```
 
-That entry targets the existing row by id. Do not wrap it in an `insert:` list — this package's own patch layer already inserts `llm-kiro`, and a second insert of the same id fails the whole profile at boot with `duplicate loader entry id: llm-kiro`.
+This is the recommended home for every field below. The plugin registers `llm-kiro` as a settings namespace, so the section reloads without a restart, it outranks the composition entry, and it is what the web Models page writes.
+
+Note that `--dump-config` prints the composition tree only, so a field configured here does not appear there. To confirm the proxy is in use, ask a `claude-*` model something: without a permitted egress it fails with `INVALID_MODEL`.
 
 Every field is optional:
 
@@ -70,7 +71,19 @@ Every field is optional:
 | `tokenExpiryBufferMs` | `300000` | Refresh the access token this long before expiry. |
 | `retryPolicy` | bounded normal | Provider-owned retry policy, executed by `dsh-llm-retry`. |
 
-The plugin also registers the `llm-kiro` settings namespace, so a `llm-kiro:` section in `$DSH_HOME/settings.yaml` overrides any field above without a restart — that is what the web Models page writes.
+### Configuring in the profile instead
+
+A deployment that wants the proxy pinned to one profile, rather than to the machine, can patch the row in `~/.dsh/profiles/<name>/cordis.patch.yml` instead:
+
+```yaml
+- id: llm-kiro
+  config:
+    proxyUrl: http://proxy.example:1082
+```
+
+Two cautions. The entry targets the existing row **by id** — do not wrap it in an `insert:` list, because this package's own patch layer already inserts `llm-kiro`, and a second insert of the same id fails the whole profile at boot with `duplicate loader entry id: llm-kiro`. And a patch layer only takes effect on restart, whereas the settings section reloads live.
+
+Configure any one field in one place. A field set in both is not an error — the settings section simply wins — but changing the patch layer then appears to do nothing.
 
 ## Use
 
