@@ -16,14 +16,7 @@ An [AWS Kiro](https://kiro.dev) (CodeWhisperer) adapter for the [DeepSeek Harnes
 dsh plugin --profile web add github:caopu16/dsh-llm-kiro
 ```
 
-pnpm 10 and later refuse to run a dependency's build scripts until the package is allowlisted, and a git-hosted install builds through this package's `prepare` script. The first attempt therefore stops with `ERR_PNPM_GIT_DEP_PREPARE_NOT_ALLOWED` and prints the exact key to allow. Copy that key — it carries the resolved commit — into `~/.dsh/profiles/<name>/pnpm-workspace.yaml`:
-
-```yaml
-allowBuilds:
-  dsh-llm-kiro@https://codeload.github.com/caopu16/dsh-llm-kiro/tar.gz/<commit>: true
-```
-
-Then re-run the same `add`. Reviewing that key is the point of the gate: it pins the exact commit whose build scripts you are trusting.
+That is the whole install, and upgrading is the same command again. Built `lib/` is committed to the repository precisely so a git-sourced install runs no build script: pnpm 10 and later block dependency build scripts until each is allowlisted by a key carrying its resolved commit, which would make every upgrade a manual allowlist edit.
 
 The package declares its own patch layer, so installing it mounts the adapter — no `cordis.yml` editing required to make the route exist. Add configuration only for the facts this package deliberately leaves empty.
 
@@ -38,6 +31,16 @@ pnpm dsh --profile web
 ```
 
 A source checkout requires `pnpm run build` first, since the profile loads built `lib/` rather than TypeScript sources.
+
+### Developing this plugin
+
+`lib/` is committed, so a change to `src/` reaches consumers only after it is rebuilt and committed too:
+
+```sh
+npm install
+npm run build
+npm test
+```
 
 ## Configure
 

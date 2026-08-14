@@ -51,8 +51,7 @@
     "build": "tsc -b tsconfig.json && tsdown",
     "typecheck": "tsc -b tsconfig.json --noEmit false --emitDeclarationOnly",
     "test": "vitest run",
-    "prepublishOnly": "npm run build",
-    "prepare": "npm run build"
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",

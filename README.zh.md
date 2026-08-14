@@ -16,14 +16,7 @@
 dsh plugin --profile web add github:caopu16/dsh-llm-kiro
 ```
 
-pnpm 10 及以上默认拒绝执行依赖的构建脚本,而 git 源安装要靠本包的 `prepare` 脚本构建。所以首次安装必然以 `ERR_PNPM_GIT_DEP_PREPARE_NOT_ALLOWED` 中止,并打印出需要放行的确切 key。把那行 key 原样(它带解析出的 commit)写进 `~/.dsh/profiles/<名称>/pnpm-workspace.yaml`:
-
-```yaml
-allowBuilds:
-  dsh-llm-kiro@https://codeload.github.com/caopu16/dsh-llm-kiro/tar.gz/<commit>: true
-```
-
-然后重跑同一条 `add`。审阅这行 key 正是该拦截的意义:它钉住了你所信任其构建脚本的那一次提交。
+这就是全部安装步骤,升级也是同一条命令。构建产物 `lib/` 被提交进仓库,正是为了让 git 源安装不执行任何构建脚本:pnpm 10 及以上会拦截依赖的构建脚本,直到你用一个带该次 commit 的 key 逐一放行,那会让每次升级都变成一次手工编辑放行名单。
 
 本包自带 patch 层,安装即挂载适配器,不需要编辑 `cordis.yml` 来让路由存在。只有本包故意留空的那些事实才需要你配置。
 
@@ -38,6 +31,16 @@ pnpm dsh --profile web
 ```
 
 源码 checkout 需要先执行 `pnpm run build`,因为 profile 加载的是构建产物 `lib/`,不是 TypeScript 源码。
+
+### 开发本插件
+
+`lib/` 是提交进仓库的,所以改动 `src/` 之后必须重新构建并一并提交,使用者才能拿到:
+
+```sh
+npm install
+npm run build
+npm test
+```
 
 ## 配置
 
