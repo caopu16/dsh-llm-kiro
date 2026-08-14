@@ -13,4 +13,4 @@
 
 - insert:
     - id: llm-kiro
-      name: '@deepseek-ai/dsh-llm-kiro'
+      name: dsh-llm-kiro
