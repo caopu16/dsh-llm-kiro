@@ -11,7 +11,7 @@ An [AWS Kiro](https://kiro.dev) (CodeWhisperer) adapter for the [DeepSeek Harnes
 ## Install
 
 ```sh
-dsh plugin --profile web add github:caopu/dsh-llm-kiro
+dsh plugin --profile web add github:caopu16/dsh-llm-kiro
 ```
 
 The package declares its own patch layer, so installing it mounts the adapter — no `cordis.yml` editing required to make the route exist. Add configuration only for the facts this package deliberately leaves empty.

@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/caopu/dsh-llm-kiro.git"
+    "url": "git+https://github.com/caopu16/dsh-llm-kiro.git"
   },
   "keywords": [
     "deepseek-harness",
@@ -47,7 +47,8 @@
     "build": "tsc -b tsconfig.json && tsdown",
     "typecheck": "tsc -b tsconfig.json --noEmit false --emitDeclarationOnly",
     "test": "vitest run",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "prepare": "npm run build"
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",
