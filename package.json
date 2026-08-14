@@ -31,7 +31,9 @@
     "./package.json": "./package.json"
   },
   "files": [
-    "lib",
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts",
     "cordis.patch.yml",
     "README.md",
     "README.zh.md",
