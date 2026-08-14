@@ -53,6 +53,8 @@ Kiro authorizes Claude models by request egress, and the permitted egress differ
     reasoningEffort: medium
 ```
 
+That entry targets the existing row by id. Do not wrap it in an `insert:` list — this package's own patch layer already inserts `llm-kiro`, and a second insert of the same id fails the whole profile at boot with `duplicate loader entry id: llm-kiro`.
+
 Every field is optional:
 
 | Field | Default | Meaning |

@@ -53,6 +53,8 @@ Kiro 按请求出口授权 Claude 模型,而获授权的出口因部署而异,�
     reasoningEffort: medium
 ```
 
+这条配置是按 id 命中已存在的行。**不要**把它包在 `insert:` 列表里——本包自带的 patch 层已经 insert 了 `llm-kiro`,同一个 id 再 insert 一次会让整个 profile 启动失败,报 `duplicate loader entry id: llm-kiro`。
+
 每个字段都是可选的:
 
 | 字段 | 默认值 | 含义 |
